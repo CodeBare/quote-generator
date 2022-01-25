@@ -1,4 +1,4 @@
-import {Box, IconButton, Container, Icon, Typography, Button, useMediaQuery, Theme, useTheme} from "@mui/material";
+import {Box, Container, Icon, Typography, Button, useMediaQuery, useTheme} from "@mui/material";
 import {FormatQuote, Twitter} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import QuoteDataHook from "./QuoteData.hook";
@@ -34,6 +34,10 @@ const App = () => {
 
     useEffect(() => {
         setNewQuote(null)
+        if(hQuotes.text.length >= 50)
+            setFontSize('2rem')
+        else
+            setFontSize('2.75rem')
     }, [hQuotes])
 
   return (
@@ -61,7 +65,7 @@ const App = () => {
             marginTop: '15px',
             textAlign: 'center'
         }}>
-            <span id={'author'}>{hQuotes.author}</span>
+            <span id={'author'}>{Boolean(hQuotes.author) ? hQuotes.author : 'Unknown'}</span>
         </Typography>
         {/* Buttons */}
         <Box sx={{
@@ -70,9 +74,13 @@ const App = () => {
             mt: '15px'
         }}>
             <Button id={'twitter'}
-                        variant={'contained'}
-                        sx={buttonSX}
-                        title={'Tweet this!'}>
+                    variant={'contained'}
+                    onClick={() => {
+                        const url = `https://twitter.com/intent/tweet?text=${hQuotes.text} - ${hQuotes.author}`
+                        window.open(url, '_blank')
+                    }}
+                    sx={buttonSX}
+                    title={'Tweet this!'}>
                 <Twitter sx={{
                     fontSize: '1.5rem'
                 }} />
